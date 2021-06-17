@@ -1,0 +1,188 @@
+---
+title: "Data Visualization with R Part 1 - Almas Fathin Irbah"
+output: html_document
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+library(corrplot)
+library(plotrix)
+library(ggthemes)
+```
+
+```{r}
+(insurance_loss <- read_csv("insurance_loss.csv"))
+```
+```{r}
+summary(insurance_loss)
+```
+```{r}
+glimpse(insurance_loss)
+```
+```{r}
+# Create a new theme
+theme_bluewhite <- function (base_size = 11, base_family = "") {
+ theme_bw() %+replace%
+ theme(
+ panel.grid.major = element_line(color = "white"),
+ panel.background = element_rect(fill = "lightblue"),
+ panel.border = element_rect(color = "lightblue", fill = NA),
+ axis.line = element_line(color = "lightblue"),
+ axis.ticks = element_line(color = "lightblue"),
+ axis.text = element_text(color = "steelblue")
+ )
+}
+```
+```{r}
+insurance_loss_data <- insurance_loss[, c(2,3,4,7,9)]
+cormat <- round(cor(insurance_loss_data),2)
+head(cormat)
+```
+```{r}
+melted_cormat <- melt(cormat)
+head(melted_cormat)
+```
+```{r}
+corrplot::corrplot(cor(cormat))
+#Terdapat korelasi yang kuat antara Age, Years of Driving Experience, Vehicle Age, dan Losses.Age - Years of Driving Exp, Age memiliki korelasi positif yang kuat, sedangkan Age-Losses dan Years of Driving Exp-Losses memiliki korelasi negatif yang kuat.
+```
+```{r}
+AgeLabel = c('Youth', 'Middle-Aged', 'Elderly')
+insurance_loss$AgeGroup = cut(insurance_loss$Age, breaks = c(16,40,63,Inf),
+ labels = AgeLabel, right = FALSE)
+ggplot(data=insurance_loss, mapping = aes(x=AgeGroup,y=Losses)) + 
+  geom_boxplot() +
+  geom_violin() +
+  theme_bluewhite()
+#Youth (usia muda, 16-40) dan middle aged(usia menengah, 40-63) memiliki hubungan nilai losses tertinggi
+```
+```{r}
+ExpLabel = c('Beginner', 'Intermediate', 'Advanced', 'Veteran')
+insurance_loss$ExpGroup = cut(insurance_loss$`Years of Driving Experience`, breaks = c(0,6,23,42,Inf),
+ labels = ExpLabel, right = FALSE)
+ggplot(data=insurance_loss,mapping = aes(x=ExpGroup,y=Losses)) + 
+  geom_boxplot() +
+  geom_violin() +
+  theme_bluewhite()
+#Berdasarkan pengalaman driving, beginner(0-6 tahun), intermediate(6-23 tahun), dan advanced(23-42 tahun) memiliki tingkat hubungan losses yang hampir sama kuatnya.
+```
+```{r}
+ExpLabel = c("0-4", "4-8", "8-12", ">12")
+insurance_loss$VehAge = cut(insurance_loss$"Vehicle Age", breaks = c(0,4,8,12,Inf),
+ labels = ExpLabel, right = FALSE)
+ggplot(data=insurance_loss,mapping = aes(x=VehAge, y=Losses)) + 
+  geom_boxplot() +
+  geom_violin() +
+  theme_bluewhite()
+#Berdasarkan usia kendaraan, usia kendaraan (0-4 tahun) memiliki nilai hubungan losses yang paling tinggi)
+```
+```{r}
+#Gender to Age Group
+round(prop.table(table(insurance_loss$Gender, insurance_loss$AgeGroup)),4)
+
+slices_gender_age <- round(prop.table(table(insurance_loss$Gender, insurance_loss$AgeGroup)),4)
+
+lbls_gender_age <- c("Youth(F)", "Youth(M)", "Middle-Aged(F)", "Middle-Aged(M)", "Elderly(F)", "Elderly(M)")
+
+pct <- slices_gender_age*100
+
+lbls_gender_age <- paste(lbls_gender_age, pct) #add percents to labels
+
+lbls_gender_age <- paste(lbls_gender_age, "%", sep = "")
+
+pie(slices_gender_age, labels = lbls_gender_age, col = rainbow(length(lbls_gender_age)), main = "Pie Chart of Gender to Age in Insurance Losses")
+#Youth/Usia muda sekitar 16-40 tahun baik laki-laki maupun perempuan, cenderung dominan dalam insurance Losses
+```
+```{r}
+#Gender to Year of Driving Experience
+round(prop.table(table(insurance_loss$Gender, insurance_loss$ExpGroup)),4)
+
+slices_gender_exp <- round(prop.table(table(insurance_loss$Gender, insurance_loss$ExpGroup)),4)
+
+lbls_gender_exp <- c("Beginner(F)", "Beginner(M)", "Intermediate(F)", "Intermediate(M)", "Advanced(F)", "Advanced(M)", "Veteran(F)", "Veteran(M)")
+
+pct <- slices_gender_exp*100
+
+lbls_gender_exp <- paste(lbls_gender_exp, pct) #add percents to labels
+
+lbls_gender_exp <- paste(lbls_gender_exp, "%", sep = "")
+
+pie(slices_gender_exp, labels = lbls_gender_exp, col = rainbow(length(lbls_gender_exp)), main = "Pie Chart of Gender to Year of Driving Experience in Insurance Losses")
+#variasi pengalaman kendaraan dalam setiap gender cenderung sama dalam insurance losses
+```
+```{r}
+#Gender to Vehicle Age
+round(prop.table(table(insurance_loss$Gender, insurance_loss$VehAge)),4)
+
+slices_gender_veh <- round(prop.table(table(insurance_loss$Gender, insurance_loss$VehAge)),4)
+
+lbls_gender_veh <- c("0-4(F)", "0-4(M)", "4-8(F)", "4-8(M)", "8-12(F)", "8-12(M)", ">12(F)", ">12(M)")
+
+pct <- slices_gender_veh*100
+
+lbls_gender_veh <- paste(lbls_gender_veh, pct) #add percents to labels
+
+lbls_gender_veh <- paste(lbls_gender_veh, "%", sep = "")
+
+pie(slices_gender_veh, labels = lbls_gender_veh, col = rainbow(length(lbls_gender_veh)), main = "Pie Chart of Gender to Vehicle Age in Insurance Losses")
+#Usia kenderaan lebih dari 12 tahun yang dimiliki laki-laki maupun perempuan cenderung dominan dalam insurance losses
+```
+```{r}
+round(prop.table(table(insurance_loss$Married, insurance_loss$AgeGroup)),4)
+
+slices_married_age <- round(prop.table(table(insurance_loss$Married, insurance_loss$AgeGroup)),4)
+
+lbls_married_age <- c("Youth(M)", "Youth(S)", "Middle-Aged(M)", "Middle-Aged(S)", "Elderly(M)", "Elderly(S)")
+
+pct <- slices_married_age*100
+
+lbls_married_age <- paste(lbls_married_age, pct) #add percents to labels
+
+lbls_married_age <- paste(lbls_married_age, "%", sep = "")
+
+pie(slices_married_age, labels = lbls_married_age, col = rainbow(length(lbls_married_age)), main = "Pie Chart of Married to Age in Insurance Losses")
+#Usia muda (16-40 tahun) baik menikah maupun single cenderung dominan dalam insurance losses
+```
+```{r}
+#Married to Year of Driving Experience
+round(prop.table(table(insurance_loss$Married, insurance_loss$ExpGroup)),4)
+
+slices_married_exp <- round(prop.table(table(insurance_loss$Married, insurance_loss$ExpGroup)),4)
+
+lbls_married_exp <- c("Beginner(M)", "Beginner(S)", "Intermediate(M)", "Intermediate(S)", "Advanced(M)", "Advanced(S)", "Veteran(M)", "Veteran(S)")
+
+pct <- slices_married_exp*100
+
+lbls_married_exp <- paste(lbls_married_exp, pct) #add percents to labels
+
+lbls_married_exp <- paste(lbls_married_exp, "%", sep = "")
+
+pie(slices_married_exp, labels = lbls_married_exp, col = rainbow(length(lbls_married_exp)), main = "Pie Chart of Married to Year of Driving Experience in Insurance Losses")
+#pengalaman berkendara yang dimiliki pasangan menikah maupun single cenderung sama pada setiap rentang waktu dalam insurance losses
+```
+```{r}
+#Gender to Vehicle Age
+round(prop.table(table(insurance_loss$Married, insurance_loss$VehAge)),4)
+
+slices_married_veh <- round(prop.table(table(insurance_loss$Married, insurance_loss$VehAge)),4)
+
+lbls_married_veh <- c("0-4(M)", "0-4(S)", "4-8(M)", "4-8(S)", "8-12(M)", "8-12(S)", ">12(M)", ">12(S)")
+
+pct <- slices_married_veh*100
+
+lbls_married_veh <- paste(lbls_married_veh, pct) #add percents to labels
+
+lbls_married_veh <- paste(lbls_married_veh, "%", sep = "")
+
+pie(slices_married_veh, labels = lbls_married_veh, col = rainbow(length(lbls_married_veh)), main = "Pie Chart of Married to Vehicle Age in Insurance Losses")
+#Usia kendaraan lebih dari 12 tahun yang dimiliki pasangan menikah dan single, cenderung dominan dalam insurance losses 
+```
+```{r}
+ggplot(data = insurance_loss, mapping = aes(x=Gender, y=Age)) +
+  geom_boxplot() +
+  theme_bluewhite()
+```
