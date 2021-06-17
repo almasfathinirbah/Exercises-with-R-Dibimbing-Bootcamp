@@ -1,0 +1,46 @@
+---
+title: "R in Practice - Almas Fathin Irbah"
+output: html_document
+---
+
+```{r}
+# Install the package if you haven't!
+# install.packages('naniar')
+library(naniar)
+```
+
+```{r}
+riskfactors
+```
+
+# PERTANYAAN
+```{r}
+# Visualize the missing data in riskfactors dataset, with package that we've learned before!
+# Apa yang bisa kita simpulkan dari missing value di data ini? Ide apa yang bisa teman-teman
+# sampaikan untuk mendiagnosa kenapa missing value ini bisa terjadi?
+```
+
+
+# PACKAGE VISUALISASI
+```{r}
+#install.packages("visdat")
+library(visdat)
+library(dplyr)
+```
+```{r}
+head(riskfactors)
+is.na(riskfactors)
+sum(is.na(riskfactors))
+vis_miss(riskfactors)
+```
+```{r}
+riskfactors %>% 
+  arrange(pregnant, health_poor, drink_days, drink_average, smoke_days, smoke_stop, smoke_last) %>% 
+  vis_miss()
+```
+
+```{r}
+#Sebagian besar missing value terletak pada kolom pregnant, health poor, drink days, drink average, smoke days, smoke stop, dan smoke last. Serta sebagian kecil tersebar dalam berbagai variasi. Berdasarkan visualisasi yang telah dibuat, saya menyimpulkan data termasuk tipe Missing Not at Random (MNAR), yang artinya adanya hubungan secara sistematik antara missing data and nilai yang tidak teramati.
+```
+
+
