@@ -1,0 +1,48 @@
+---
+title: "Data Cleansing - Almas Fathin Irbah"
+output: html_document
+---
+
+```{r}
+# Load the necessary packages
+library(readr)
+library(assertive)
+library(dplyr)
+```
+
+```{r}
+# Import CSV for prices
+(airbnb_price <- read_csv('airbnb_price.csv'))
+```
+
+```{r}
+# Checking data types
+assert_is_numeric(airbnb_price$price)
+```
+```{r}
+#converting character to numeric (step 1)
+price_trimmed = str_remove(airbnb_price$price, " dollars")
+price_trimmed
+```
+
+```{r}
+#converting character to numeric (step 2)
+price_in_dollar <- as.numeric(as.character(price_trimmed))
+class(price_in_dollar)
+```
+```{r}
+#checking data types (2)
+assert_is_numeric(price_in_dollar)
+```
+```{r}
+#finding the mean of price
+mean(price_in_dollar)
+```
+```{r}
+#adding the price as numeric to table
+airbnb_price %>% 
+  select(-price) %>% 
+  mutate(price_in_dollar)
+```
+
+
