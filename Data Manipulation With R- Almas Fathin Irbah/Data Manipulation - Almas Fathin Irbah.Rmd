@@ -1,0 +1,45 @@
+---
+title: "Data Manipulation - Almas Fathin Irbah"
+output: html_document
+---
+
+```{r}
+library(readr)
+library(dplyr)
+```
+```{r}
+(questions <- read.csv("questions.csv"))
+(answers <- read.csv("answers.csv"))
+(question_tags <- read.csv("question_tags.csv"))
+(tags <- read.csv("tags.csv")) 
+```
+```{r}
+#Menghitung banyaknya question_id pada dataset 'answers.csv'  
+answers %>% 
+  count(question_id, sort = TRUE)
+```
+
+```{r}
+#Join hasil data di atas ke kolom dataset 'questions.csv'
+answers %>% 
+  count(question_id, sort = TRUE) %>% 
+  inner_join(questions, by = c("question_id" = "id"))
+```
+
+```{r}
+#Join hasil data di atas ke dataset `questions_tags.csv` dan ke dataset `tags.csv`
+answers %>% 
+  count(question_id, sort = TRUE) %>% 
+  inner_join(questions, by = c("question_id" = "id")) %>% 
+  inner_join(question_tags, by = "question_id") %>% 
+  inner_join(tags, by = c("question_id" = "id"))
+```
+```{r}
+#Agregasi berdasarkan kolom `tag_name` untuk mendapatkan banyaknya pertanyaan muncul dan mengurutkan hasil akhir dari `tag_name` yang paling sering muncul.
+answers %>% 
+  count(question_id, sort = TRUE) %>% 
+  inner_join(questions, by = c("question_id" = "id")) %>% 
+  inner_join(question_tags, by = "question_id") %>% 
+  inner_join(tags, by = c("question_id" = "id")) %>% 
+  count(tag_name, sort = TRUE)
+```
