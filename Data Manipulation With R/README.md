@@ -1,19 +1,19 @@
-#Data Manipulation With R
+# Data Manipulation With R
 
-##Why to use dplyr? →
+## Why to use dplyr? →
 
 * Great for data exploration and transformation
 * Fast on data frames
 * Excellent for Five basic verbs: filter, select, arrange, mutate, summarise (plus group_by)
 
-##Load dplyr
+## Load dplyr
 
 ````
 library(readr)
 library(dplyr)
 ````
 
-##Read the datasets
+## Read the datasets
 The four datasets we will use are:
 1. questions.csv → dataset of questions asked, storing column `id` as identifier.
 2. answers.csv → dataset about the answers given, column `id` as the main identifier and has column `question_id` to combine against dataset `questions`.
@@ -27,14 +27,14 @@ The four datasets we will use are:
 (tags <- read.csv("tags.csv"))
 ````
 
-##Counting 
+## Counting 
 Count the number of question_id in the dataset answers.csv
 ````
 answers %>% 
   count(question_id, sort = TRUE)
 ````
 
-##Joining 
+## Joining 
 Join the data results to the dataset column 'questions.csv'
 ````
 answers %>% 
@@ -51,7 +51,7 @@ answers %>%
   inner_join(tags, by = c("question_id" = "id"))
 ````
 
-##Aggregating
+## Aggregating
 Aggregate by column `tag_name` to get the number of questions that appear and sort the final result from `tag_name` most frequently.
 ````
 answers %>% 
