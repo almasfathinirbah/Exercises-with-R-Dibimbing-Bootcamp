@@ -1,6 +1,6 @@
 # Data Manipulation With R
 
-## Why to use dplyr? →
+## Why use dplyr? →
 
 * Great for data exploration and transformation
 * Fast on data frames
@@ -61,5 +61,7 @@ answers %>%
   inner_join(tags, by = c("question_id" = "id")) %>% 
   count(tag_name, sort = TRUE)
 ````
+## Summary
+In this case, we counted how many times each `question_id` appears in the `answers.csv` dataset. Joined the results to the dataset column `questions.csv`. Then, joined to dataset `questions_tags.csv` and to dataset `tags.csv`. From the result, aggregation based on column `tag_name` to get the number of times the question appears. The last sorted the final result of the `tag_name` that occurs most often.
 
-Thanks you 😁
+Thank you 😁
