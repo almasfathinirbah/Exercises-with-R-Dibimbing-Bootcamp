@@ -1,6 +1,6 @@
 # Data Cleansing With R
 
-We will show you how to cleanse the dataset. Why do we need to cleanse the dataset? Because the dirty dataset will be difficult to be analyzed and report the insight. 
+We will show you how to cleanse the dataset. __Why do we need to cleanse the dataset?__ Because the dirty dataset will be difficult to be analyzed and report the insight. 
 ![why](https://user-images.githubusercontent.com/85482667/122724266-f6f6cd00-d29d-11eb-9efa-d3713207ee3a.PNG)
 
 The source of the dataset we will use for this case is Airbnb price. 
