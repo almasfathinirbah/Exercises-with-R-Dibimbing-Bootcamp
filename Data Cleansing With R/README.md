@@ -54,4 +54,4 @@ airbnb_price %>%
 ![result](https://user-images.githubusercontent.com/85482667/122724183-e47c9380-d29d-11eb-8b44-b3839b6cff81.PNG)
 
 ## Summary
-In this case, we used Airbnb price as the dataset we will cleanse. We need the important libraries to diagnose the data type and stringr library to remove the character we want to. Finally, we have the clean data to be analyzed.
+In this case, we used Airbnb price as the dataset we will cleanse. We need the assertive library to diagnose the data type and stringr library to remove the character we want to. Finally, we have the clean data to be analyzed.
