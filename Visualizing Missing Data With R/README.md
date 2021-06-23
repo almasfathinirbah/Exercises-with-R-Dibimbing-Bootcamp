@@ -1,6 +1,7 @@
 # DIAGNOSTIC OF THE MISSING DATA WITH R
 
 ## Description
+### The Behavioral Risk Factor Surveillance System (BRFSS) Survey Data, 2009
 The data is a subset of the 2009 survey from BRFSS, an ongoing data collection program designed to measure behavioral risk factors for the adult population (18 years of age or older) living in households.
 
 ### Usage
@@ -9,7 +10,7 @@ data(riskfactors
 ### Format
 An object of class tbl_df (inherits from tbl, data.frame) with 245 rows and 34 columns.
 
-### Source : The Behavioral Risk Factor Surveillance System (BRFSS) Survey Data, 2009.
+### Source 
 https://www.cdc.gov/brfss/annual_data/annual_2009.htm
 
 ### See Also
